@@ -1,27 +1,23 @@
 import os
 import json
+import time
+import urllib.parse
 from fastapi import FastAPI, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 import requests
 from dotenv import load_dotenv
-from huggingface_hub import InferenceClient
 from supabase import create_client
 from ddgs import DDGS
 import edge_tts
 import base64
-from io import BytesIO
 
 load_dotenv()
 
 app = FastAPI(title="MU.AI")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# ===== Hugging Face Client =====
-HF_TOKEN = os.getenv("HF_TOKEN")
-hf_client = InferenceClient(token=HF_TOKEN) if HF_TOKEN else None
 
 # ===== Supabase Connection =====
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -92,7 +88,8 @@ FORBIDDEN_WORDS = [
     "system prompt", "instructions",
     "language model", "llm", "api key",
     "hugging face", "huggingface", "flux", "stable diffusion",
-    "supabase", "tavily", "duckduckgo", "ddgs", "edge-tts", "edge tts"
+    "supabase", "tavily", "duckduckgo", "ddgs", "edge-tts", "edge tts",
+    "pollinations"
 ]
 
 
@@ -439,17 +436,31 @@ async def text_to_speech(req: TTSRequest):
 
 @app.post("/generate-image")
 def generate_image(req: ImageRequest):
-    if not hf_client:
-        return {"error": "Image service is not available."}
+    """🎨 Create image with Pollinations AI (FREE, no API key needed)"""
     try:
         english_prompt = translate_to_english(req.prompt)
         print(f"🎨 Creating image: {english_prompt[:50]}...")
-        image = hf_client.text_to_image(english_prompt, model="black-forest-labs/FLUX.1-schnell")
-        buffered = BytesIO()
-        image.save(buffered, format="PNG")
-        img_base64 = base64.b64encode(buffered.getvalue()).decode()
-        print("✅ Image created!")
+        
+        # Pollinations AI — completely free, no API key
+        encoded_prompt = urllib.parse.quote(english_prompt)
+        seed = int(time.time())
+        image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=1024&nologo=true&seed={seed}"
+        
+        print(f"🌐 Pollinations URL: {image_url[:80]}...")
+        
+        # Download image
+        response = requests.get(image_url, timeout=120)
+        
+        if response.status_code != 200:
+            print(f"❌ Pollinations error: {response.status_code}")
+            return {"error": f"Could not create image: HTTP {response.status_code}"}
+        
+        # Convert to base64
+        img_base64 = base64.b64encode(response.content).decode()
+        print(f"✅ Image created! Size: {len(response.content)} bytes")
+        
         return {"image": f"data:image/png;base64,{img_base64}"}
+    
     except Exception as e:
         print(f"❌ Image error: {str(e)}")
         return {"error": f"Could not create image: {str(e)}"}
