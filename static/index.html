@@ -1,0 +1,321 @@
+  <!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MU.AI | Personal AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ===== LOGIN SCREEN ===== -->
+    <div id="auth-screen" class="auth-screen">
+        <div class="auth-bg-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        
+        <div class="auth-container">
+            <div class="muai-logo muai-logo-large">
+                <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="mu-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00C8FF"/>
+                            <stop offset="50%" stop-color="#367CFF"/>
+                            <stop offset="100%" stop-color="#9B4DFF"/>
+                        </linearGradient>
+                        <filter id="mu-glow">
+                            <feGaussianBlur stdDeviation="8"/>
+                        </filter>
+                    </defs>
+
+                    <g class="mu-letter mu-m">
+                        <path d="M105 205V85 C105 72 120 65 132 73 L205 130 L278 73 C290 65 305 72 305 85 V205" class="mu-glow-line"/>
+                        <path d="M105 205V85 C105 72 120 65 132 73 L205 130 L278 73 C290 65 305 72 305 85 V205" class="mu-white-line"/>
+                        <path d="M105 205V118 C105 103 115 96 126 105 L158 130" class="mu-gradient-line"/>
+                    </g>
+
+                    <g class="mu-letter mu-u">
+                        <path d="M350 85V165 C350 193 372 210 405 210 C438 210 460 193 460 165 V85" class="mu-white-line"/>
+                    </g>
+
+                    <g class="mu-dot">
+                        <circle cx="535" cy="185" r="23" fill="url(#mu-gradient)"/>
+                    </g>
+
+                    <g class="mu-letter mu-a">
+                        <path d="M590 205L665 85 C671 75 683 75 689 85 L764 205" class="mu-glow-line"/>
+                        <path d="M590 205L665 85 C671 75 683 75 689 85 L764 205" class="mu-white-line"/>
+                        <path d="M625 165H730" class="mu-white-line mu-a-bar"/>
+                    </g>
+
+                    <g class="mu-letter mu-i">
+                        <path d="M820 85V205" class="mu-white-line"/>
+                    </g>
+                </svg>
+            </div>
+            <p class="auth-subtitle">Personal AI</p>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')" id="tab-login">Login</button>
+                <button class="auth-tab" onclick="switchAuthTab('signup')" id="tab-signup">Sign Up</button>
+            </div>
+
+            <div id="login-form" class="auth-form active">
+                <div class="input-group">
+                    <input type="email" id="login-email" placeholder="Email" />
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-password" placeholder="Password" />
+                </div>
+                <div id="login-error" class="auth-error"></div>
+                <button class="auth-btn" onclick="handleLogin()" id="login-btn">Login</button>
+            </div>
+
+            <div id="signup-form" class="auth-form">
+                <div class="input-group">
+                    <input type="text" id="signup-name" placeholder="Name" />
+                </div>
+                <div class="input-group">
+                    <input type="email" id="signup-email" placeholder="Email" />
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signup-password" placeholder="Password (min 6 chars)" />
+                </div>
+                <div id="signup-error" class="auth-error"></div>
+                <button class="auth-btn" onclick="handleSignup()" id="signup-btn">Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== APP SCREEN ===== -->
+    <div id="app-screen" class="app-screen" style="display: none;">
+        <aside id="sidebar" class="sidebar closed">
+            <div class="sidebar-header">
+                <button class="icon-btn" onclick="toggleSidebar()" title="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" title="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </button>
+            </div>
+
+            <button class="new-chat-btn" onclick="clearChatAndClose()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                <span>New Chat</span>
+            </button>
+
+            <div class="sidebar-section">
+                <p class="sidebar-label">Conversations</p>
+                <div id="history-list" class="history-list">
+                    <div class="empty-history">
+                        <p>No conversations yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-info" onclick="handleLogout()">
+                    <div class="user-avatar" id="user-avatar">MU</div>
+                    <div class="user-details">
+                        <p id="header-name">MU.AI</p>
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" id="sidebar-toggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                </svg>
+            </button>
+
+            <div id="chat-box" class="chat-box">
+                <div class="welcome-screen" id="welcome-screen">
+                    <div class="muai-logo muai-logo-medium">
+                        <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="mu-gradient-welcome" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#00C8FF"/>
+                                    <stop offset="50%" stop-color="#367CFF"/>
+                                    <stop offset="100%" stop-color="#9B4DFF"/>
+                                </linearGradient>
+                                <filter id="mu-glow-welcome">
+                                    <feGaussianBlur stdDeviation="8"/>
+                                </filter>
+                            </defs>
+                            <g class="mu-letter mu-m">
+                                <path d="M105 205V85 C105 72 120 65 132 73 L205 130 L278 73 C290 65 305 72 305 85 V205" class="mu-glow-line"/>
+                                <path d="M105 205V85 C105 72 120 65 132 73 L205 130 L278 73 C290 65 305 72 305 85 V205" class="mu-white-line"/>
+                                <path d="M105 205V118 C105 103 115 96 126 105 L158 130" class="mu-gradient-line"/>
+                            </g>
+                            <g class="mu-letter mu-u">
+                                <path d="M350 85V165 C350 193 372 210 405 210 C438 210 460 193 460 165 V85" class="mu-white-line"/>
+                            </g>
+                            <g class="mu-dot">
+                                <circle cx="535" cy="185" r="23" fill="url(#mu-gradient-welcome)"/>
+                            </g>
+                            <g class="mu-letter mu-a">
+                                <path d="M590 205L665 85 C671 75 683 75 689 85 L764 205" class="mu-glow-line"/>
+                                <path d="M590 205L665 85 C671 75 683 75 689 85 L764 205" class="mu-white-line"/>
+                                <path d="M625 165H730" class="mu-white-line mu-a-bar"/>
+                            </g>
+                            <g class="mu-letter mu-i">
+                                <path d="M820 85V205" class="mu-white-line"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <h2>What can I help with?</h2>
+                    <div class="quick-actions">
+                        <button class="quick-action" onclick="quickAsk('Create an image')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="9" cy="9" r="2"/>
+                                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                            </svg>
+                            <span>Create Image</span>
+                        </button>
+                        <button class="quick-action" onclick="quickAsk('Write a text')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                            </svg>
+                            <span>Write Text</span>
+                        </button>
+                        <button class="quick-action" onclick="quickAsk('Recommend a website')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            </svg>
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <div class="input-container">
+                    <button class="input-icon-btn" onclick="toggleImageMode()" id="image-btn" title="Create Image">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <circle cx="9" cy="9" r="2"/>
+                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                        </svg>
+                    </button>
+                    <input type="text" id="user-input" placeholder="Ask MU.AI..." autocomplete="off" />
+                    <button class="input-icon-btn" onclick="startVoiceCall()" title="Voice Call">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/>
+                        </svg>
+                    </button>
+                    <button class="send-btn" onclick="sendMessage()" id="send-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="input-footer">Made by Mostafa Akbari. May make mistakes — check important info.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== VOICE CALL SCREEN ===== -->
+    <div id="call-screen" class="call-screen" style="display: none;">
+        <div class="call-bg-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        <div class="call-container">
+            <button class="call-top-close" onclick="endVoiceCall()" title="Close">✕</button>
+            <div class="call-header">
+                <div class="call-avatar-wrapper">
+                    <div class="call-avatar-pulse"></div>
+                    <div class="call-avatar-logo">
+                        <div class="muai-logo muai-logo-tiny">
+                            <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="mu-gradient-call" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#00C8FF"/>
+                                        <stop offset="50%" stop-color="#367CFF"/>
+                                        <stop offset="100%" stop-color="#9B4DFF"/>
+                                    </linearGradient>
+                                    <filter id="mu-glow-call">
+                                        <feGaussianBlur stdDeviation="8"/>
+                                    </filter>
+                                </defs>
+                                <g class="mu-letter mu-m">
+                                    <path d="M105 205V85 C105 72 120 65 132 73 L205 130 L278 73 C290 65 305 72 305 85 V205" class="mu-glow-line"/>
+                                    <path d="M105 205V85 C105 72 120 65 132 73 L205 130 L278 73 C290 65 305 72 305 85 V205" class="mu-white-line"/>
+                                    <path d="M105 205V118 C105 103 115 96 126 105 L158 130" class="mu-gradient-line"/>
+                                </g>
+                                <g class="mu-letter mu-u">
+                                    <path d="M350 85V165 C350 193 372 210 405 210 C438 210 460 193 460 165 V85" class="mu-white-line"/>
+                                </g>
+                                <g class="mu-dot">
+                                    <circle cx="535" cy="185" r="23" fill="url(#mu-gradient-call)"/>
+                                </g>
+                                <g class="mu-letter mu-a">
+                                    <path d="M590 205L665 85 C671 75 683 75 689 85 L764 205" class="mu-glow-line"/>
+                                    <path d="M590 205L665 85 C671 75 683 75 689 85 L764 205" class="mu-white-line"/>
+                                    <path d="M625 165H730" class="mu-white-line mu-a-bar"/>
+                                </g>
+                                <g class="mu-letter mu-i">
+                                    <path d="M820 85V205" class="mu-white-line"/>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <h1>MU.AI</h1>
+                <p class="call-timer" id="call-timer">00:00</p>
+            </div>
+
+            <div class="call-visualizer">
+                <div class="wave-container" id="wave-container">
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                </div>
+            </div>
+
+            <div class="call-status">
+                <span class="status-icon" id="call-status-icon">🎤</span>
+                <p class="status-text" id="call-status-text">Tap the mic to start</p>
+            </div>
+
+            <div class="call-transcript">
+                <p id="call-transcript-text"></p>
+            </div>
+
+            <div class="call-controls">
+                <button class="call-end-btn" onclick="endVoiceCall()" title="End Call">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/>
+                    </svg>
+                </button>
+                <button class="call-close-btn" onclick="endVoiceCall()" title="Close">✕</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>

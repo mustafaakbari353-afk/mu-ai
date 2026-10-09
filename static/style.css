@@ -1,0 +1,1252 @@
+/* ========================================
+   🎨 MU.AI — Design System
+======================================== */
+
+:root {
+    --bg-main: #0a0f0d;
+    --bg-sidebar: #0f1613;
+    --bg-input: #1a2420;
+    --bg-hover: #16201c;
+    --bg-message-user: #1a2420;
+    --text-primary: #e8f0ec;
+    --text-secondary: #94a89e;
+    --text-muted: #5e7268;
+    --accent: #10a37f;
+    --accent-hover: #0d8a6a;
+    --accent-light: #34d399;
+    --accent-gradient: linear-gradient(135deg, #10a37f 0%, #059669 50%, #34d399 100%);
+    --accent-gradient-reverse: linear-gradient(135deg, #34d399 0%, #10a37f 100%);
+    --border: #1f2e28;
+    --border-light: #16201c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    background: var(--bg-main);
+    color: var(--text-primary);
+    overflow: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(16, 163, 127, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(52, 211, 153, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ========================================
+   🎨 لوگوی MU.AI
+======================================== */
+
+.muai-logo {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    animation: logoFloat 5s ease-in-out infinite;
+}
+
+.muai-logo svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+}
+
+.mu-letter {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: letterFloat 4s ease-in-out infinite;
+}
+
+.mu-m { animation-delay: 0s; }
+.mu-u { animation-delay: .15s; }
+.mu-a { animation-delay: .3s; }
+.mu-i { animation-delay: .45s; }
+
+.mu-white-line {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 30;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mu-gradient-line {
+    fill: none;
+    stroke: url(#mu-gradient);
+    stroke-width: 30;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 8px rgba(0, 174, 255, .55));
+}
+
+.mu-glow-line {
+    fill: none;
+    stroke: url(#mu-gradient);
+    stroke-width: 34;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: .35;
+    filter: url(#mu-glow);
+}
+
+.mu-dot {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: dotFloat 2.2s ease-in-out infinite;
+    filter:
+        drop-shadow(0 0 8px rgba(0, 174, 255, .7))
+        drop-shadow(0 0 20px rgba(80, 80, 255, .35));
+}
+
+@keyframes letterFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes dotFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-7px) scale(1.08); }
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+}
+
+.muai-logo:hover .mu-letter { animation-duration: 2s; }
+.muai-logo:hover .mu-dot { animation-duration: .8s; }
+
+.muai-logo-large { width: 220px; max-width: 55vw; }
+.muai-logo-medium { width: 180px; max-width: 50vw; }
+.muai-logo-small { width: 130px; max-width: 40vw; }
+.muai-logo-tiny { width: 90px; max-width: 30vw; }
+
+.auth-container .muai-logo { margin-bottom: 16px; }
+.welcome-screen .muai-logo { margin-bottom: 24px; }
+.call-avatar-logo .muai-logo { margin-bottom: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+    .muai-logo, .mu-letter, .mu-dot { animation: none; }
+}
+
+/* ========================================
+   🎨 Orb ها
+======================================== */
+
+.auth-bg-orbs, .call-bg-orbs {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: orbFloat 20s ease-in-out infinite;
+}
+
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #10a37f, transparent);
+    top: -100px;
+    right: -100px;
+}
+
+.orb-2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, #34d399, transparent);
+    bottom: -100px;
+    left: -100px;
+    animation-delay: -7s;
+}
+
+.orb-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #059669, transparent);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -14s;
+}
+
+@keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(50px, -30px) scale(1.1); }
+    66% { transform: translate(-30px, 50px) scale(0.9); }
+}
+
+/* ========================================
+   🔐 صفحه لاگین
+======================================== */
+
+.auth-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+    overflow-y: auto;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    background: rgba(15, 22, 19, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(16, 163, 127, 0.15);
+    border-radius: 24px;
+    padding: 32px 28px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+}
+
+.auth-tabs {
+    display: flex;
+    background: var(--bg-input);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(16, 163, 127, 0.1);
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+}
+
+.auth-tab.active {
+    background: var(--accent-gradient);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+    color: white;
+    box-shadow: 0 4px 16px rgba(16, 163, 127, 0.4);
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.auth-form { display: none; flex-direction: column; gap: 12px; }
+.auth-form.active { display: flex; }
+.auth-form .input-group { display: flex; flex-direction: column; }
+
+.auth-form input {
+    padding: 13px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: all 0.3s;
+}
+
+.auth-form input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.15);
+}
+
+.auth-form input::placeholder { color: var(--text-muted); }
+
+.auth-btn {
+    padding: 14px;
+    background: var(--accent-gradient);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+    margin-top: 8px;
+    box-shadow: 0 6px 24px rgba(16, 163, 127, 0.4);
+}
+
+.auth-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(16, 163, 127, 0.6);
+}
+
+.auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.auth-error {
+    color: #f5576c;
+    font-size: 13px;
+    min-height: 18px;
+    text-align: center;
+}
+
+/* ========================================
+   🏠 صفحه اصلی
+======================================== */
+
+.app-screen {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.sidebar {
+    width: 260px;
+    background: var(--bg-sidebar);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border-light);
+    position: relative;
+    z-index: 2;
+}
+
+.sidebar.closed {
+    width: 0;
+    overflow: hidden;
+    border: none;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background: var(--bg-hover);
+    color: var(--accent-light);
+}
+
+.new-chat-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin: 4px 8px 8px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.new-chat-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+
+.new-chat-btn:hover {
+    border-color: transparent;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 163, 127, 0.3);
+}
+
+.new-chat-btn:hover::before { opacity: 1; }
+
+.sidebar-section {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.sidebar-section::-webkit-scrollbar { width: 4px; }
+.sidebar-section::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 2px;
+}
+
+.sidebar-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 8px 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.history-item {
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.history-item:hover { background: var(--bg-hover); }
+
+.history-item.active {
+    background: linear-gradient(135deg, rgba(16, 163, 127, 0.15), rgba(52, 211, 153, 0.1));
+    border-left: 3px solid var(--accent);
+}
+
+.history-item-title {
+    font-size: 13.5px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+}
+
+.history-item-preview {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.empty-history {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.sidebar-footer {
+    padding: 8px;
+    border-top: 1px solid var(--border-light);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.user-info:hover { background: var(--bg-hover); }
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(16, 163, 127, 0.4);
+}
+
+.user-details p {
+    font-size: 13.5px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.user-details span {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-width: 0;
+}
+
+.sidebar-toggle {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 44px;
+    height: 44px;
+    background: rgba(16, 163, 127, 0.2);
+    border: 1px solid rgba(16, 163, 127, 0.4);
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--accent-light);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: all 0.2s;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(16, 163, 127, 0.3);
+}
+
+.sidebar-toggle:hover {
+    background: rgba(16, 163, 127, 0.35);
+    transform: scale(1.05);
+}
+
+/* ========================================
+   💬 کادر چت
+======================================== */
+
+.chat-box {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 20px 180px;
+    scroll-behavior: smooth;
+}
+
+.chat-box::-webkit-scrollbar { width: 8px; }
+.chat-box::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+.welcome-screen {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-top: 12vh;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.welcome-screen h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.quick-action {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(15, 22, 19, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+    text-align: left;
+}
+
+.quick-action:hover {
+    background: rgba(16, 163, 127, 0.15);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(16, 163, 127, 0.25);
+}
+
+.quick-action svg {
+    color: var(--accent-light);
+    flex-shrink: 0;
+}
+
+/* پیام‌ها */
+.message {
+    max-width: 720px;
+    margin: 0 auto 24px;
+    display: flex;
+    gap: 16px;
+    animation: messageIn 0.3s ease;
+    padding: 0 8px;
+}
+
+@keyframes messageIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+}
+
+.message.user .message-avatar {
+    background: var(--accent-gradient);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+}
+
+.message.bot .message-avatar {
+    background: var(--accent-gradient-reverse);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+}
+
+.message-content {
+    flex: 1;
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--text-primary);
+    padding-top: 4px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    min-width: 0;
+}
+
+.message.user { flex-direction: row-reverse; }
+
+.message.user .message-content {
+    background: var(--bg-message-user);
+    padding: 12px 16px;
+    border-radius: 18px;
+    max-width: 70%;
+    margin-right: auto;
+    margin-left: 44px;
+    border: 1px solid rgba(16, 163, 127, 0.15);
+}
+
+.typing { display: flex; gap: 4px; padding: 4px 0; }
+.typing span {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* ========================================
+   💬 کادر ورودی — FIX شده برای موبایل
+======================================== */
+
+.input-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 20px 20px;
+    background: linear-gradient(to top, var(--bg-main) 60%, transparent);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.input-container {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(15, 22, 19, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    padding: 6px 8px 6px 14px;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.input-container:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(16, 163, 127, 0.15), 0 12px 40px rgba(16, 163, 127, 0.25);
+}
+
+.input-icon-btn {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.input-icon-btn:hover:not(:disabled) {
+    background: var(--bg-hover);
+    color: var(--accent-light);
+}
+
+.input-icon-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#user-input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-family: inherit;
+    padding: 8px 4px;
+}
+
+#user-input::placeholder { color: var(--text-muted); }
+
+.send-btn {
+    width: 38px;
+    height: 38px;
+    background: var(--accent-gradient);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(16, 163, 127, 0.5);
+}
+
+.send-btn:hover:not(:disabled) {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 8px 28px rgba(16, 163, 127, 0.7);
+}
+
+.send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.input-footer {
+    max-width: 720px;
+    margin: 6px auto 0;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    pointer-events: auto;
+}
+
+/* تصویر ساخته‌شده */
+.generated-image {
+    width: 300px !important;
+    height: auto !important;
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 8px 0;
+    display: block;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.download-btn-inline {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--accent-gradient);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+/* ========================================
+   📞 تماس صوتی
+======================================== */
+
+.call-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-main);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+    overflow: hidden;
+}
+
+.call-container {
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    max-height: 780px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 60px 24px 40px;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 2;
+}
+
+.call-top-close {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+.call-top-close:hover {
+    background: rgba(239, 68, 68, 0.3);
+    transform: scale(1.1);
+}
+
+.call-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.call-avatar-wrapper {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.call-avatar-pulse {
+    position: absolute;
+    inset: -15px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    opacity: 0.3;
+    animation: avatarPulse 2s ease-in-out infinite;
+    filter: blur(20px);
+}
+
+@keyframes avatarPulse {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.3); opacity: 0.5; }
+}
+
+.call-avatar-logo {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(15, 22, 19, 0.85);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(16, 163, 127, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 20px 60px rgba(16, 163, 127, 0.4);
+    padding: 16px;
+}
+
+.call-avatar-logo .muai-logo { width: 100%; max-width: 100px; }
+
+.call-header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    font-family: 'Orbitron', 'Inter', sans-serif;
+    letter-spacing: 1px;
+}
+
+.call-timer {
+    font-size: 16px;
+    color: var(--text-secondary);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 3px;
+}
+
+.call-visualizer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    width: 100%;
+}
+
+.wave-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 100px;
+}
+
+.wave {
+    width: 6px;
+    background: var(--accent-gradient);
+    border-radius: 3px;
+    animation: waveAnim 1.2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(16, 163, 127, 0.5);
+}
+
+.wave:nth-child(1) { animation-delay: 0s; height: 30px; }
+.wave:nth-child(2) { animation-delay: 0.1s; height: 40px; }
+.wave:nth-child(3) { animation-delay: 0.2s; height: 60px; }
+.wave:nth-child(4) { animation-delay: 0.3s; height: 80px; }
+.wave:nth-child(5) { animation-delay: 0.4s; height: 60px; }
+.wave:nth-child(6) { animation-delay: 0.5s; height: 40px; }
+.wave:nth-child(7) { animation-delay: 0.6s; height: 30px; }
+
+@keyframes waveAnim {
+    0%, 100% { transform: scaleY(0.4); opacity: 0.5; }
+    50% { transform: scaleY(1); opacity: 1; }
+}
+
+.wave-container.listening .wave {
+    background: linear-gradient(180deg, #34d399, #10a37f);
+}
+
+.call-status {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-height: 70px;
+}
+
+.status-icon { font-size: 32px; }
+
+.status-text {
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+.call-transcript {
+    width: 100%;
+    max-width: 420px;
+    min-height: 60px;
+    padding: 14px 20px;
+    background: rgba(15, 22, 19, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-align: center;
+    font-size: 14.5px;
+    color: var(--text-primary);
+    line-height: 1.7;
+}
+
+.call-controls {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding-top: 20px;
+}
+
+.call-end-btn {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 40px rgba(239, 68, 68, 0.5);
+}
+
+.call-end-btn:hover { transform: scale(1.1); }
+.call-end-btn svg { transform: rotate(135deg); }
+
+.call-close-btn {
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.call-close-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+}
+
+/* ========================================
+   📱 موبایل — FIX شده کامل
+======================================== */
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+        transform: translateX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.closed {
+        transform: translateX(-100%);
+        width: 260px;
+    }
+
+    .sidebar-toggle {
+        display: flex !important;
+        position: fixed !important;
+        top: 12px !important;
+        left: 12px !important;
+        z-index: 9999 !important;
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .chat-box {
+        padding: 60px 8px 140px;
+    }
+
+    .message {
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+
+    .message-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 9px;
+    }
+
+    .message-content {
+        font-size: 14.5px;
+    }
+
+    .message.user .message-content {
+        max-width: 85%;
+        margin-left: 38px;
+    }
+
+    /* ✅ کادر ورودی موبایل — بهینه */
+    .input-wrapper {
+        padding: 0 6px 6px;
+    }
+
+    .input-container {
+        padding: 5px 6px 5px 12px;
+        gap: 4px;
+        border-radius: 22px;
+        max-width: 100%;
+    }
+
+    .input-icon-btn {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+    }
+
+    .input-icon-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* ✅ دکمه ارسال — حتماً دیده بشه */
+    .send-btn {
+        width: 34px;
+        height: 34px;
+        flex-shrink: 0;
+    }
+
+    .send-btn svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    #user-input {
+        font-size: 14px;
+        padding: 6px 2px;
+        min-width: 0;
+    }
+
+    .input-footer {
+        font-size: 10px;
+        margin-top: 4px;
+    }
+
+    .welcome-screen {
+        padding-top: 8vh;
+    }
+
+    .welcome-screen h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .call-avatar-logo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .auth-container {
+        padding: 28px 20px;
+        max-width: 100%;
+    }
+
+    .call-top-close {
+        top: 12px;
+        left: 12px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .muai-logo-large { width: 180px; }
+    .muai-logo-medium { width: 150px; }
+    .muai-logo-tiny { width: 80px; }
+}
+
+/* صفحه‌های خیلی کوچیک (مثل iPhone SE) */
+@media (max-width: 400px) {
+    .input-container {
+        padding: 4px 5px 4px 10px;
+        gap: 3px;
+    }
+
+    .input-icon-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .input-icon-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .send-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .send-btn svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    #user-input {
+        font-size: 13px;
+    }
+}
