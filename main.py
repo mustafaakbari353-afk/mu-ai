@@ -89,7 +89,7 @@ FORBIDDEN_WORDS = [
     "language model", "llm", "api key",
     "hugging face", "huggingface", "flux", "stable diffusion",
     "supabase", "tavily", "duckduckgo", "ddgs", "edge-tts", "edge tts",
-    "pollinations"
+    "pollinations", "goblin", "cloudflare", "corsproxy"
 ]
 
 
@@ -436,24 +436,58 @@ async def text_to_speech(req: TTSRequest):
 
 @app.post("/generate-image")
 def generate_image(req: ImageRequest):
-    """🎨 Create image with Pollinations AI (FREE, no API key needed)"""
+    """🎨 Create image with Pollinations AI via Proxy (FREE)"""
     try:
         english_prompt = translate_to_english(req.prompt)
         print(f"🎨 Creating image: {english_prompt[:50]}...")
         
-        # Pollinations AI — completely free, no API key
         encoded_prompt = urllib.parse.quote(english_prompt)
         seed = int(time.time())
-        image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=1024&nologo=true&seed={seed}"
         
-        print(f"🌐 Pollinations URL: {image_url[:80]}...")
+        # Build Pollinations URL
+        pollinations_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=1024&nologo=true&seed={seed}"
         
-        # Download image
-        response = requests.get(image_url, timeout=120)
+        # Try multiple methods
+        urls_to_try = [
+            # Method 1: Direct (might work sometimes)
+            pollinations_url,
+            # Method 2: via corsproxy.io
+            f"https://corsproxy.io/?{urllib.parse.quote(pollinations_url)}",
+            # Method 3: via allorigins
+            f"https://api.allorigins.win/raw?url={urllib.parse.quote(pollinations_url)}",
+            # Method 4: via whateverorigin
+            f"https://api.codetabs.com/v1/proxy?quest={urllib.parse.quote(pollinations_url)}",
+        ]
         
-        if response.status_code != 200:
-            print(f"❌ Pollinations error: {response.status_code}")
-            return {"error": f"Could not create image: HTTP {response.status_code}"}
+        response = None
+        for i, url in enumerate(urls_to_try, 1):
+            try:
+                print(f"🌐 Trying method {i}: {url[:60]}...")
+                r = requests.get(
+                    url,
+                    timeout=120,
+                    headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+                )
+                print(f"📡 Status: {r.status_code}, Size: {len(r.content)} bytes")
+                
+                # Check if we got a valid image
+                if r.status_code == 200 and len(r.content) > 5000:
+                    # Verify it's an image (starts with PNG/JPEG magic bytes)
+                    if r.content[:4] in [b'\x89PNG', b'\xff\xd8\xff\xe0', b'\xff\xd8\xff\xe1', b'\xff\xd8\xff\xe2']:
+                        print(f"✅ Got valid image from method {i}!")
+                        response = r
+                        break
+                    else:
+                        print(f"⚠️ Method {i}: Not a valid image")
+                else:
+                    print(f"⚠️ Method {i}: Invalid response")
+            except Exception as e:
+                print(f"⚠️ Method {i} failed: {str(e)}")
+                continue
+        
+        if not response or response.status_code != 200:
+            print(f"❌ All methods failed")
+            return {"error": "Image service is busy. Please try again in a moment!"}
         
         # Convert to base64
         img_base64 = base64.b64encode(response.content).decode()
